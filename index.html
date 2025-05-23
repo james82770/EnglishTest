@@ -1017,7 +1017,7 @@
         writingResult.classList.remove("hidden");
 
         const correctAnswers = correctAnswer
-          .replaceAll(/^\[.*\]/, "")
+          .replaceAll(/^\[.*\]/gm, "")
           .split(/[、,，\|]/)
           .filter((x) => x)
           .map((x) => x.trim());

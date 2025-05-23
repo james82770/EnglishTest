@@ -1018,7 +1018,7 @@
 
         const correctAnswers = correctAnswer
           .replaceAll(/^\[.*\]/, "")
-          .split(/[、\|]/)
+          .split(/[、,，\|]/)
           .filter((x) => x)
           .map((x) => x.trim());
         if (

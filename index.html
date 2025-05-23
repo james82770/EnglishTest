@@ -290,10 +290,10 @@
 
           <!-- 單字卡片 -->
           <div id="quiz-card" class="hidden mb-6">
-            <div class="flip-card h-64">
+            <div class="flip-card">
               <div class="flip-card-inner h-full relative">
                 <div
-                  class="flip-card-front h-full w-full absolute flex flex-col items-center justify-center p-6 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-dark-light"
+                  class="flip-card-front h-full w-full relative flex flex-col items-center justify-center p-6 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-dark-light"
                 >
                   <h4
                     class="text-xl font-bold mb-4 text-primary"
@@ -856,11 +856,10 @@
           return;
         }
 
+        startQuizBtn.classList.add("hidden");
+
         // 重置測驗結果
-        data.quizResults = {
-          correct: 0,
-          incorrect: 0,
-        };
+        data.quizResults = { correct: 0, incorrect: 0 };
 
         // 準備測驗單字（隨機選擇）
         const unmasteredWords = data.words.filter((w) => !w.mastered);
@@ -1073,6 +1072,7 @@
         quizCard.classList.add("hidden");
         writingQuiz.classList.add("hidden");
         quizResults.classList.add("hidden");
+        startQuizBtn.classList.remove("hidden");
         wordsContainer.classList.remove("hidden");
         addWordBtn.classList.remove("hidden");
 

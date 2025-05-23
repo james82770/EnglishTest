@@ -9,6 +9,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
       rel="stylesheet"
     />
+
     <script>
       tailwind.config = {
         darkMode: "class",
@@ -29,6 +30,31 @@
         },
       };
     </script>
+    <style>
+      #words-container::-webkit-scrollbar {
+        width: 10px;
+        height: 1px;
+      }
+      #words-container::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: skyblue;
+        background-image: -webkit-linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.2) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.2) 50%,
+          rgba(255, 255, 255, 0.2) 75%,
+          transparent 75%,
+          transparent
+        );
+      }
+      #words-container::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        background: #ededed;
+        border-radius: 10px;
+      }
+    </style>
     <style type="text/tailwindcss">
       @layer utilities {
         .content-auto {
@@ -104,7 +130,7 @@
     </nav>
 
     <!-- 主內容 -->
-    <main class="flex-grow container mx-auto px-4 py-8">
+    <main class="flex-1 container mx-auto px-4 py-8">
       <!-- 歡迎區域 -->
       <section class="text-center mb-10">
         <h2 class="text-2xl font-bold mb-2">提升你的英文能力</h2>
@@ -154,7 +180,7 @@
       </section>
 
       <!-- 主要功能區 -->
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- 單字管理 -->
         <div
           class="bg-white dark:bg-dark-light rounded-xl shadow p-6 border border-gray-100 dark:border-gray-700"
@@ -230,7 +256,7 @@
           </div>
 
           <!-- 單字列表 -->
-          <div id="words-container">
+          <div id="words-container" class="max-h-40 overflow-y-auto">
             <div class="text-center py-8 text-light-gray">
               <i class="fa-solid fa-book-open text-4xl mb-4 opacity-30"></i>
               <p>單字庫是空的，請添加單字</p>
@@ -603,10 +629,10 @@
       function updateWordsList() {
         if (data.words.length === 0) {
           wordsContainer.innerHTML = `
-                    <div class="text-center py-8 text-light-gray">
-                        <i class="fa-solid fa-book-open text-4xl mb-4 opacity-30"></i>
-                        <p>單字庫是空的，請添加單字</p>
-                    </div>
+                <div class="text-center py-8 text-light-gray">
+                  <i class="fa-solid fa-book-open text-4xl mb-4 opacity-30"></i>
+                  <p>單字庫是空的，請添加單字</p>
+                </div>
                 `;
           return;
         }
@@ -615,53 +641,48 @@
 
         data.words.forEach((wordObj, index) => {
           const wordEl = document.createElement("div");
+          wordEl.dataset.id = wordObj.id;
           wordEl.className =
-            "flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700 last:border-0";
+            "flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700 last:border-0 mx-4";
           wordEl.innerHTML = `
-                    <div class="flex items-center">
-                        <div class="mr-4 text-secondary">${index + 1}</div>
-                        <div>
-                            <h4 class="font-medium ${
-                              wordObj.mastered
-                                ? "text-secondary line-through"
-                                : ""
-                            }">${wordObj.word}</h4>
-                            <p class="text-sm text-light-gray">${
-                              wordObj.translation
-                            }</p>
-                            ${
-                              wordObj.example
-                                ? `<p class="text-xs text-light-gray italic mt-1">${wordObj.example}</p>`
-                                : ""
-                            }
-                        </div>
+                  <div class="flex items-center">
+                    <div class="mr-4 text-secondary">${index + 1}</div>
+                    <div>
+                      <h4 class="font-medium ${
+                        wordObj.mastered ? "text-secondary line-through" : ""
+                      }">${wordObj.word}</h4>
+                      <p class="text-sm text-light-gray">${
+                        wordObj.translation
+                      }</p>
+                      ${
+                        wordObj.example
+                          ? `<p class="text-xs text-light-gray italic mt-1">${wordObj.example}</p>`
+                          : ""
+                      }
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <button class="edit-word text-light-gray hover:text-primary transition-colors" data-id="${
-                          wordObj.id
-                        }">
-                            <i class="fa-solid fa-pencil"></i>
-                        </button>
-                        <button class="delete-word text-light-gray hover:text-red-500 transition-colors" data-id="${
-                          wordObj.id
-                        }">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                        ${
-                          wordObj.mastered
-                            ? `<button class="unmark-mastered text-light-gray hover:text-accent transition-colors" data-id="${wordObj.id}">
-                                <i class="fa-solid fa-undo"></i>
-                            </button>`
-                            : `<button class="mark-mastered text-light-gray hover:text-secondary transition-colors" data-id="${wordObj.id}">
-                                <i class="fa-solid fa-check"></i>
-                            </button>`
-                        }
-                        <button class="play-word text-light-gray hover:text-primary transition-colors" data-id="${
-                          wordObj.id
-                        }" ${speechSynthesis ? "disable" : ""}>
-                            <i class="fa-solid fa-play"></i>
-                        </button>
-                    </div>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <button class="edit-word text-light-gray hover:text-primary transition-colors">
+                      <i class="fa-solid fa-pencil"></i>
+                    </button>
+                    <button class="delete-word text-light-gray hover:text-red-500 transition-colors">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                    ${
+                      wordObj.mastered
+                        ? `<button class="unmark-mastered text-light-gray hover:text-accent transition-colors">
+                            <i class="fa-solid fa-undo"></i>
+                        </button>`
+                        : `<button class="mark-mastered text-light-gray hover:text-secondary transition-colors">
+                            <i class="fa-solid fa-check"></i>
+                        </button>`
+                    }
+                    <button class="play-word text-light-gray hover:text-primary transition-colors" ${
+                      speechSynthesis ? "disable" : ""
+                    }>
+                      <i class="fa-solid fa-play"></i>
+                    </button>
+                  </div>
                 `;
 
           wordsContainer.appendChild(wordEl);
@@ -673,66 +694,47 @@
           const markMasteredBtn = wordEl.querySelector(".mark-mastered");
           const unmarkMasteredBtn = wordEl.querySelector(".unmark-mastered");
 
+          const wordId = wordObj.id;
           editBtn.addEventListener("click", () => {
-            // 簡單的編輯功能
-            const wordId = parseInt(editBtn.dataset.id);
-            const wordToEdit = data.words.find((w) => w.id === wordId);
+            wordInput.value = wordObj.word;
+            translationInput.value = wordObj.translation;
+            exampleInput.value = wordObj.example;
+            addWordForm.classList.remove("hidden");
 
-            if (wordToEdit) {
-              wordInput.value = wordToEdit.word;
-              translationInput.value = wordToEdit.translation;
-              exampleInput.value = wordToEdit.example;
-              addWordForm.classList.remove("hidden");
-
-              // 修改保存按鈕為更新按鈕
-              saveWord.textContent = "更新";
-              saveWord.removeEventListener("click", saveWordHandler);
-              saveWord.addEventListener("click", () => {
-                updateWord(wordId);
-                addWordForm.classList.add("hidden");
-                clearAddWordForm();
-                saveWord.textContent = "保存";
-                saveWord.removeEventListener("click", updateWordHandler);
-                saveWord.addEventListener("click", saveWordHandler);
-              });
-            }
+            // 修改保存按鈕為更新按鈕
+            saveWord.textContent = "更新";
+            saveWord.removeEventListener("click", saveWordHandler);
+            saveWord.addEventListener("click", () => {
+              updateWord(wordId);
+              addWordForm.classList.add("hidden");
+              clearAddWordForm();
+              saveWord.textContent = "保存";
+              saveWord.removeEventListener("click", updateWordHandler);
+              saveWord.addEventListener("click", saveWordHandler);
+            });
           });
 
           deleteBtn.addEventListener("click", () => {
-            const wordId = parseInt(deleteBtn.dataset.id);
-            const wordToDelete = data.words.find((w) => w.id === wordId);
-
-            if (wordToDelete) {
-              showConfirmDialog(
-                `刪除單字 "${wordToDelete.word}"`,
-                "確定要刪除此單字嗎？",
-                () => deleteWord(wordId)
-              );
-            }
+            showConfirmDialog(
+              `刪除單字 "${wordObj.word}"`,
+              "確定要刪除此單字嗎？",
+              () => deleteWord(wordId)
+            );
           });
 
           playerBtn.addEventListener("click", () => {
-            const wordId = parseInt(deleteBtn.dataset.id);
-            const wordToDelete = data.words.find((w) => w.id === wordId);
-
-            if (wordToDelete) {
-              speechSynthesis.cancel();
-              speechSynthesis.speak(
-                new SpeechSynthesisUtterance(wordToDelete.word)
-              );
-            }
+            speechSynthesis.cancel();
+            speechSynthesis.speak(new SpeechSynthesisUtterance(wordObj.word));
           });
 
           if (markMasteredBtn) {
             markMasteredBtn.addEventListener("click", () => {
-              const wordId = parseInt(markMasteredBtn.dataset.id);
               markWordAsMastered(wordId, true);
             });
           }
 
           if (unmarkMasteredBtn) {
             unmarkMasteredBtn.addEventListener("click", () => {
-              const wordId = parseInt(unmarkMasteredBtn.dataset.id);
               markWordAsMastered(wordId, false);
             });
           }

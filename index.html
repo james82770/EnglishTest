@@ -9,10 +9,24 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
       rel="stylesheet"
     />
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
-    <link rel="manifest" href="./site.webmanifest">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./favicon-16x16.png"
+    />
+    <link rel="manifest" href="./site.webmanifest" />
 
     <script>
       tailwind.config = {
@@ -1002,7 +1016,15 @@
 
         writingResult.classList.remove("hidden");
 
-        if (userAnswer === correctAnswer) {
+        const correctAnswers = correctAnswer
+          .replaceAll(/^\[.*\]/, "")
+          .split(/[、\|]/)
+          .filter((x) => x)
+          .map((x) => x.trim());
+        if (
+          userAnswer === correctAnswer ||
+          correctAnswers.indexOf(userAnswer)
+        ) {
           data.quizResults.correct++;
           resultText.textContent = "正確！🎉";
           resultText.classList.add("text-secondary");
